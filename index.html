@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>conexionBD</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <section class="conteiner">
+        <h1>conexionBD</h1>
+        <form action="/guardar" method="POST" class="formulario">
+            <label for="tipoDoc">tipo de documento</label>
+            <select name="tipoDoc" id="tipoDoc"> 
+                <option value="CC">CC</option>
+                <option value="TI">TI</option>
+                <option value="CE">CE</option>
+            </select>
+    
+            <label for="numDoc">Numero de Documento</label>
+            <input type="text" name="numDoc" id="numDoc" required>
+    
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" required>
+    
+            <label for="apellido">Apellido</label>
+            <input type="text" name="apellido" id="apellido" required >
+    
+            <label for="nombreUsuario">Nombre Usuario</label>
+            <input type="text" name="nombreUsuario" id="nombreUsuario" required>
+    
+            <label for="claveUsuario">Clave Usuario</label>
+            <input type="text" name="claveUsuario" id="claveUsuario" required>
+    
+            <label for="correo"> Correo</label>
+            <input type="email" name="correo" id="correo" required>
+    
+            <button type="submit">Guardar</button>
+        </form>
+    </section>
+    <script src="app.js"></script>
+</body>
+</html>
