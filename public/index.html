@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <!-- Formulario de la información -->
     <section class="conteiner">
         <h1>conexionBD</h1>
-        <form action="/guardar" method="POST" class="formulario">
+        <form  id="formulario">
             <label for="tipoDoc">tipo de documento</label>
             <select name="tipoDoc" id="tipoDoc"> 
                 <option value="CC">CC</option>
@@ -18,26 +19,32 @@
             </select>
     
             <label for="numDoc">Numero de Documento</label>
-            <input type="text" name="numDoc" id="numDoc" required>
+            <input type="text" name="numDoc" id="numDoc" required/>
     
             <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" required>
+            <input type="text" name="nombre" id="nombre" required/>
     
             <label for="apellido">Apellido</label>
-            <input type="text" name="apellido" id="apellido" required >
+            <input type="text" name="apellido" id="apellido" required/>
     
             <label for="nombreUsuario">Nombre Usuario</label>
-            <input type="text" name="nombreUsuario" id="nombreUsuario" required>
+            <input type="text" name="nombreUsuario" id="nombreUsuario" required/>
     
             <label for="claveUsuario">Clave Usuario</label>
-            <input type="password" name="claveUsuario" id="claveUsuario" required>
+            <input type="password" name="claveUsuario" id="claveUsuario" required/>
     
             <label for="correo"> Correo</label>
-            <input type="email" name="correo" id="correo" required>
-    
-            <button type="submit">Guardar</button>
+            <input type="email" name="correo" id="correo" required/>
+
+            <!-- Botones para mandar peticiones -->
+            <div class="botones">
+                <button type="button" onclick="guardar()">Guardar</button>
+                <button type="button" onclick="buscar()">Buscar</button>
+                <button type="button" onclick="actualizar()">Actualizar</button>
+                <button type="button" onclick="eliminar()">Eliminar</button>
+            </div>
         </form>
     </section>
-    <script src="./app.js"></script>
+    <script src="/script.js"></script>
 </body>
 </html>

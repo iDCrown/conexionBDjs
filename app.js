@@ -1,19 +1,23 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
-
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static('public'));
 
+app.use(express.json());
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
+// Servir el HTML para mostrarlo en el servidor
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'conexionBD'
 })
-
+//Manejo de error de base de datos y confirmación de la respuesta exitosa
 connection.connect(error => {
     if(error){
         return console.log('errror en la conexion ' + error.message);
@@ -41,56 +45,34 @@ app.post('/guardar', (req, res) => {
 });
 
 // READ (ver todos los usuarios)
-app.get('/usuarios', (req, res) => {
-    const query = 'SELECT * FROM usuario';
-
-    connection.query(query, (error, results) => {
-        if (error) {
-            console.error('Error al obtener usuarios: ' + error.message);
-            res.send('Error al obtener usuarios');
-        } else {
-            res.json(results);
-        }
+app.get('/usuarios/:numDoc', (req, res) => {
+    const  numDoc  = req.params.numDoc;
+    connection.query('SELECT * FROM usuario WHERE numDoc = ?', [numDoc], (err, results) => {
+        if (err || results.length === 0) return res.json(null);
+        res.json(results[0]);
     });
 });
 
 // UPDATE (actualizar un usuario por numDoc)
-app.post('/actualizar', (req, res) => {
-    const { tipoDoc, nombre, apellido, nombreUsuario, claveUsuario, correo, numDoc } = req.body;
-    const query = 'UPDATE usuario SET tipoDoc = ?, nombre = ?, apellido = ?, nombreUsuario = ?, claveUsuario = ?, correo = ? WHERE numDoc = ?';
-    const values = [tipoDoc, nombre, apellido, nombreUsuario, claveUsuario, correo, numDoc];
-
-    connection.query(query, values, (error, results) => {
-        if (error) {
-            console.error('Error al actualizar: ' + error.message);
-            res.send('Error al actualizar');
-        } else {
-            console.log('Usuario actualizado');
-            res.send('Usuario actualizado correctamente');
-        }
+app.put('/actualizar', (req, res) => {
+    const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo } = req.body;
+    const query = 'UPDATE usuario SET tipoDoc=?, nombre=?, apellido=?, nombreUsuario=?, claveUsuario=?, correo=? WHERE numDoc=?';
+    connection.query(query, [tipoDoc, nombre, apellido, nombreUsuario, claveUsuario, correo, numDoc], (err) => {
+        if (err) return res.json('Error al actualizar');
+        res.json('Actualizado correctamente');
     });
 });
 
 // DELETE (eliminar un usuario por numDoc)
-app.post('/eliminar', (req, res) => {
-    const { numDoc } = req.body;
-    const query = 'DELETE FROM usuario WHERE numDoc = ?';
-
-    connection.query(query, [numDoc], (error, results) => {
-        if (error) {
-            console.error('Error al eliminar: ' + error.message);
-            res.send('Error al eliminar');
-        } else {
-            console.log('Usuario eliminado');
-            res.send('Usuario eliminado correctamente');
-        }
+app.delete('/eliminar/:numDoc', (req, res) => {
+    const  numDoc  = req.params.numDoc;
+    connection.query('DELETE FROM usuario WHERE numDoc = ?', [numDoc], (err) => {
+        if (err) return res.send('Error al eliminar');
+        res.json('Eliminado correctamente');
     });
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
+//aviso para confirmar por donde corre el servidor
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
