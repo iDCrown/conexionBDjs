@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    <h1>Bienvenido al Login</h1>
+    <form action="/login" method="POST">
+      <input type="text" name="nombreUsuario" placeholder="Nombre de usuario" required><br>
+      <input type="password" name="claveUsuario" placeholder="Contraseña" required><br>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <% if (claveOriginal) { %>
+      <h3>Contraseña Original: <%= claveOriginal %></h3>
+      <h3>Hash (Bcrypt): <%= hash %></h3>
+      <h3>Cifrado (AES): <%= cifrado %></h3>
+    <% } %>
+  </body>
+</html>
