@@ -10,7 +10,7 @@
       <button type="submit">Iniciar sesión</button>
     </form>
 
-    <% if (claveOriginal) { %>
+    <% if (typeof claveOriginal !== 'undefined' && claveOriginal) { %>
       <h3>Contraseña Original: <%= claveOriginal %></h3>
       <h3>Hash (Bcrypt): <%= hash %></h3>
       <h3>Cifrado (AES): <%= cifrado %></h3>
