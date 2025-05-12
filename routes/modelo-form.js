@@ -49,4 +49,26 @@ router.delete('/eliminar/:numDoc', (req, res) => {
     });
 });
 
+// LOGIN
+router.post('/login', (req, res) => {
+    const { nombreUsuario, claveUsuario } = req.body;
+
+    const query = 'SELECT * FROM usuario WHERE nombreUsuario = ?';
+    connection.query(query, [nombreUsuario], async (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(401).send('Usuario no encontrado');
+        }
+
+        const usuario = results[0];
+        const match = await res.compare(claveUsuario, usuario.claveUsuario);
+
+        if (match) {
+            res.send('Login exitoso');
+        } else {
+            res.status(401).send('Contraseña incorrecta');
+        }
+    });
+});
+
+
 module.exports = router;

@@ -15,7 +15,7 @@ app.use('/', usuariosRouter);
 
 // Ruta principal que devuelve tu index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'vistas', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'vistas', 'login.html'));
 });
 
 
