@@ -28,8 +28,13 @@ router.post('/guardar', async (req, res) => {
                 res.send('Error al guardar');
             } else {
                 console.log('Hash generado:', hash);
+                console.log('Cifrado generado:', encrypted);
                 console.log('Datos guardados');
-                
+                res.json({
+                    mensaje: 'Datos guardados correctamente',
+                    hash: hash,
+                    cifrado: encrypted
+                });
             }
         });
     } catch (err) {

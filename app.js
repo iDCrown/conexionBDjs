@@ -15,9 +15,11 @@ const usuariosRouter = require('./routes/modelo-form');
 app.use('/usuarios', usuariosRouter);  // Cambio aquí para diferenciar las rutas
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'vistas', 'login.html'));
+    res.sendFile(path.join(__dirname, 'public', 'vistas', 'login.html'));
 });
+
 // Arranque del servidor
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
+
