@@ -12,8 +12,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
 const usuariosRouter = require('./routes/modelo-form');
-app.use('/usuarios', usuariosRouter);  // Cambio aquí para diferenciar las rutas
+app.use('/usuarios', usuariosRouter); 
 
+//Ruta del primer ingreso
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'vistas', 'login.html'));
 });

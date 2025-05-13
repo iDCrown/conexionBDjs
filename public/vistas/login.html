@@ -11,9 +11,63 @@
     <input type="password" name="claveUsuario" placeholder="Contraseña" required><br>
     <button type="submit">Entrar</button>
   </form>
+  <div id="resultado"></div>
   <p>¿No tienes cuenta? 
     <a href="/vistas/index.html">Regístrate aquí</a>
   </p>
   <script src="/Ajax/Ajax.js"></script>
+  <script>
+  const resultado = document.getElementById('resultado');
+const form = document.getElementById('loginForm');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch('http://localhost:3000/usuarios/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        // Verificamos si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.mensaje === 'Usuario no encontrado' || result.mensaje === 'Contraseña incorrecta') {
+            resultado.innerHTML = `
+                <p><strong>${result.mensaje}</strong></p>
+                <p><strong>Hash generado:</strong></p>
+                <pre>${result.hashGenerado}</pre>
+                <p><strong>Cifrado AES:</strong></p>
+                <pre>${result.cifrado}</pre>
+            `;
+        } else {
+            resultado.innerHTML = `
+                <p><strong>${result.mensaje}</strong></p>
+                <p><strong>Hash generado:</strong></p>
+                <pre>${result.hashGenerado}</pre>
+                <p><strong>Hash de la base de datos:</strong></p>
+                <pre>${result.hashBD}</pre>
+                <p><strong>Cifrado AES:</strong></p>
+                <pre>${result.cifrado}</pre>
+            `;
+        }
+
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+        resultado.textContent = 'Error en la solicitud.';
+    }
+});
+
+  </script>
 </body>
 </html>

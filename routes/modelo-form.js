@@ -77,19 +77,30 @@ router.post('/login', (req, res) => {
 
     const query = 'SELECT * FROM usuario WHERE nombreUsuario = ?';
     connection.query(query, [nombreUsuario], async (err, results) => {
+        const hashGenerado = await bcrypt.hash(claveUsuario, 10); // Genera el hash siempre
+        const cifrado = CryptoJS.AES.encrypt(claveUsuario, 'mi_clave_secreta').toString(); // Cifra la contraseña
+
         if (err || results.length === 0) {
-            return res.status(401).send('Usuario no encontrado');
+            return res.status(401).json({
+                mensaje: 'Usuario no encontrado',
+                hashGenerado, // Envia el hash generado
+                hashBD: null,
+                cifrado
+            });
         }
 
         const usuario = results[0];
-        
-        const match = await bcrypt.compare(claveUsuario, usuario.claveUsuario);
+        const hashBD = usuario.claveUsuario;
 
-        if (match) {
-            res.send('Login exitoso');
-        } else {
-            res.status(401).send('Contraseña incorrecta');
-        }
+        const match = await bcrypt.compare(claveUsuario, hashBD); // Compara la contraseña con el hash en la base de datos
+
+        // Ya no es necesario declarar `cifrado` de nuevo
+        res.json({
+            mensaje: match ? 'Login exitoso' : 'Contraseña incorrecta',
+            hashGenerado, // Envia siempre el hash generado
+            hashBD,
+            cifrado // Utiliza el mismo cifrado que ya habías generado antes
+        });
     });
 });
 
