@@ -10,7 +10,6 @@ const CryptoJS = require('crypto-js');
 // Crear nuevo usuario
 router.post('/guardar', async (req, res) => {
     const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo } = req.body;
-
     try {
         const query = 'INSERT INTO usuario (tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo) VALUES (?, ?, ?, ?, ?, ?, ?)';
         
@@ -23,6 +22,7 @@ router.post('/guardar', async (req, res) => {
         const values = [tipoDoc, numDoc, nombre, apellido, nombreUsuario, hash, correo];
         
         connection.query(query, values, (error, results) => {
+           
             if (error) {
                 console.error('Error al guardar: ' + error.message);
                 res.send('Error al guardar');
@@ -30,12 +30,6 @@ router.post('/guardar', async (req, res) => {
                 console.log('Hash generado:', hash);
                 console.log('Datos guardados');
                 
-                // Asegúrate de pasar estos valores correctamente
-                res.render('login', {
-                    claveOriginal: claveUsuario,  // Aquí pasas la contraseña original
-                    hash: hash,  // Aquí pasas el hash generado
-                    cifrado: encrypted  // Aquí pasas el valor cifrado
-                });
             }
         });
     } catch (err) {
