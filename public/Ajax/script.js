@@ -9,7 +9,6 @@ function getFormData() {
         nombre: form.nombre.value,
         apellido: form.apellido.value,
         nombreUsuario: form.nombreUsuario.value,
-        claveUsuario: form.claveUsuario.value,
         correo: form.correo.value
     };
 }
@@ -20,7 +19,6 @@ function setFormData(data) {
     form.nombre.value = data.nombre;
     form.apellido.value = data.apellido;
     form.nombreUsuario.value = data.nombreUsuario;
-    form.claveUsuario.value = data.claveUsuario;
     form.correo.value = data.correo;
 }
 //Función para guardar la información por medio del metodo POST, espera un objeto JSON
