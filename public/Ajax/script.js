@@ -23,7 +23,7 @@ function setFormData(data) {
 }
 //Función para guardar la información por medio del metodo POST, espera un objeto JSON
 function guardar() {
-    fetch('/guardar', {
+    fetch('/usuarios/guardar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(getFormData())

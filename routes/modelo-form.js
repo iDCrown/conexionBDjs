@@ -9,9 +9,20 @@ const CryptoJS = require('crypto-js');
 
 // Crear nuevo usuario
 router.post('/guardar', async (req, res) => {
-    const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo } = req.body;
+    const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, correo } = req.body;
     try {
         const query = 'INSERT INTO usuario (tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        
+         //Generar contraseña
+        const fecha = new Date();
+        const anoActual = fecha.getFullYear();
+        const mes = fecha.getMonth()
+        const suma = mes + 13
+        const claveUsuario = String(nombre.charAt(0) + apellido + anoActual + suma);
+        console.log(`primera letra del nombre ${nombre.charAt(0)}`)
+        console.log(`clave de mes ${mes} + 13 = ${suma}`)
+        console.log(`clave de año actual ${anoActual}`)
+        console.log(`clave de usuario ${claveUsuario}`)
         
         // Genera el hash con bcrypt
         const hash = await bcrypt.hash(claveUsuario, 10);
@@ -38,8 +49,12 @@ router.post('/guardar', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error en el try:', err);
-        res.status(500).send('Error interno del servidor');
+            console.error('Error en el try:', err);
+        res.status(500).json({
+            error: 'Error interno del servidor',
+            detalles: err.message
+        });
+
     }
 });
 
@@ -54,9 +69,9 @@ router.get('/usuarios/:numDoc', (req, res) => {
 
 // UPDATE (actualizar un usuario por numDoc)
 router.put('/actualizar', (req, res) => {
-    const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, claveUsuario, correo } = req.body;
-    const query = 'UPDATE usuario SET tipoDoc=?, nombre=?, apellido=?, nombreUsuario=?, claveUsuario=?, correo=? WHERE numDoc=?';
-    connection.query(query, [tipoDoc, nombre, apellido, nombreUsuario, claveUsuario, correo, numDoc], (err) => {
+    const { tipoDoc, numDoc, nombre, apellido, nombreUsuario, correo } = req.body;
+    const query = 'UPDATE usuario SET tipoDoc=?, nombre=?, apellido=?, nombreUsuario=?, correo=? WHERE numDoc=?';
+    connection.query(query, [tipoDoc, nombre, apellido, nombreUsuario, correo, numDoc], (err) => {
         if (err) return res.json('Error al actualizar');
         res.json('Actualizado correctamente');
     });
